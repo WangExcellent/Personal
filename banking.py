@@ -27,10 +27,9 @@ class bank():
 
 
     def create(self):
-        innercite = bank()
         acreator = str(rd.randint(000000000, 999999999))
         self.card = '400000' + "0" * (9 - len(acreator)) + acreator
-        self.card = self.card + innercite.Luhn_num(self.card)
+        self.card = self.card + user.Luhn_num(self.card)
         self.PIN = str(rd.randint(0000, 9999))
         self.PIN = "0" * (4 - len(self.PIN)) + self.PIN
         print("Your card has been created")
@@ -43,7 +42,6 @@ class bank():
 
     def login(self):
         global flag
-        innercite = bank()
         self.card = input("Enter your card number: \n")
         self.PIN = input("Enter your PIN: \n")
         if self.card in self.account and self.PIN == self.account[self.card]:
@@ -61,7 +59,7 @@ class bank():
                     bankstore.commit()
                     print("Income was added!")
                 elif n == 3:
-                    innercite.transfer(self.card, input("Enter card number:\n"))
+                    user.transfer(input("Enter card number:\n"))
                 elif n == 4:
                     cur.execute("delete from card where id='{}'".format(self.card))
                     print("The account has been closed!")
@@ -78,19 +76,8 @@ class bank():
         else:
             print("Wrong card number or PIN!")
 
-    def transfer(self, ex_account, target_account):
-        innercite = bank()
-        self.card = ex_account
-        self.account = {}
-        self.balance = {}
-        cur.execute('select number, pin, balance from card')
-        result = cur.fetchall()
-        if len(result) > 0:
-            for i in range(len(result)):
-                self.account[result[i][0]] = result[i][1]
-                self.balance[result[i][0]] = result[i][2]
-
-        if innercite.Luhn_num(target_account[0:15]) != target_account[15]:
+    def transfer(self, target_account):
+        if user.Luhn_num(target_account[0:15]) != target_account[15]:
             print("Probably you made a mistake in the card number. Please try again!")
         elif target_account not in self.account:
             print("Such a card does not exist.")
