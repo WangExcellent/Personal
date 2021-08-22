@@ -20,7 +20,7 @@ class bank():
         self.PIN = None
         self.account = {}
         self.balance = {}
-        if len(result) > 0:
+        if len(result) > 0:#import the stored account data from sql
             for i in range(len(result)):
                 self.account[result[i][0]] = result[i][1]
                 self.balance[result[i][0]] = result[i][2]
@@ -41,13 +41,13 @@ class bank():
         bankstore.commit()
 
     def login(self):
-        global flag
+        global flag#used for stop function of "exit" option
         self.card = input("Enter your card number: \n")
         self.PIN = input("Enter your PIN: \n")
         if self.card in self.account and self.PIN == self.account[self.card]:
             print("You have successfully logged in!\n")
 
-            while True:
+            while True:#nesting loop for secondary menu after login
                 print("""1. Balance\n2. Add income\n3. Do Transfer\n4. Close account\n5. Log out\n0. Exit""")
                 n = int(input())
                 if n == 1:
@@ -103,7 +103,7 @@ class bank():
         checksum = [str(a) for a in range(10) if (a + sum(Luhn)) % 10 == 0]
         return checksum[0]
 
-
+#main loop
 user = bank()
 flag = True
 while flag == True:
@@ -119,8 +119,5 @@ while flag == True:
     elif com == 0:
         print("Bye!")
         break
-
-
-
 cur.close()
 bankstore.close()
